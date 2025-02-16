@@ -17,7 +17,7 @@ function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart))
 }
 
-
+//take products Id and find the matching product in the cart 
 export function addToCart (productId) {
     let matchingItem;
     
@@ -51,3 +51,5 @@ cart = newCart
 
 saveToStorage();
   }
+
+ 

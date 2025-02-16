@@ -33,12 +33,13 @@ cart.forEach((cartItem) => {
     // Ensure valid deliveryDays value
     let deliveryDays = deliveryOption?.deliveryDays;
     if (typeof deliveryDays !== 'number' || isNaN(deliveryDays)) {
-        deliveryDays = 7; // Default value if invalid
+        console.warn(`Invalid deliveryDays for option ${deliveryOptionId}. Defaulting to 7 days.`);
+        deliveryDays = 7; 
     }
 
     // Calculate the delivery date based on the selected option
     const deliveryDate = today.add(deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMM D'); // Correct date format
+    const dateString = deliveryDate.format('dddd, MMM D'); 
 
     cartSummarryHTML += `
         <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -76,7 +77,7 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
         // Ensure valid deliveryDays value for each option
         let deliveryDays = deliveryOption?.deliveryDays;
         if (typeof deliveryDays !== 'number' || isNaN(deliveryDays)) {
-            deliveryDays = 7; 
+            deliveryDays = 7; // Fallback to 7 days if invalid
         }
 
         // Calculate the delivery date for each option
@@ -150,3 +151,5 @@ document.querySelectorAll('.js-delete-link').forEach((link) => {
         }
     });
 });
+
+            
