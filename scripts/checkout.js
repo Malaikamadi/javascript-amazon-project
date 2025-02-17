@@ -1,8 +1,9 @@
 import { cart, removeFromCart } from '../data/cart.js';
-import { products } from '../data/products.js';
+import { products, getProduct} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import { deliveryOptions } from '../data/deliveryOptions.js';
+import { deliveryOptions, getDeliveryOption } from '../data/deliveryOptions.js';
+
 
 // Delivery Date
 const today = dayjs();
@@ -10,30 +11,22 @@ console.log(today.format('dddd, MMM D '));
 
 let cartSummarryHTML = '';
 
-cart.forEach((cartItem) => {
-    const productId = cartItem.productId;
-    let matchingProduct;
+   cart.forEach((cartItem) => {
+    
 
-    // Find the matching product
-    products.forEach((product) => {
-        if (product.id === productId) {
-            matchingProduct = product;
-        }
-    });
+    let matchingProduct = getProduct(cartItem.productId)
+
 
     // To show the selected delivery date
     const deliveryOptionId = cartItem.deliveryOptionId;
-    let deliveryOption;
-    deliveryOptions.forEach((option) => {
-        if (option.id === deliveryOptionId) {
-            deliveryOption = option;
-        }
-    });
+    
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
+    
 
     // Ensure valid deliveryDays value
     let deliveryDays = deliveryOption?.deliveryDays;
     if (typeof deliveryDays !== 'number' || isNaN(deliveryDays)) {
-        console.warn(`Invalid deliveryDays for option ${deliveryOptionId}. Defaulting to 7 days.`);
+
         deliveryDays = 7; 
     }
 
@@ -41,7 +34,8 @@ cart.forEach((cartItem) => {
     const deliveryDate = today.add(deliveryDays, 'days');
     const dateString = deliveryDate.format('dddd, MMM D'); 
 
-    cartSummarryHTML += `
+    cartSummarryHTML += 
+    `
         <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
             <div class="delivery-date js-delivery-date-${matchingProduct.id}">
                 Delivery date: ${dateString}
@@ -64,7 +58,7 @@ cart.forEach((cartItem) => {
                             Delete
                         </span>
                     </div>
-                    ${deliveryOptionsHTML(matchingProduct, cartItem)} <!-- Corrected here -->
+                    ${deliveryOptionsHTML(matchingProduct, cartItem)} 
                 </div>
             </div>
         </div>
@@ -152,4 +146,3 @@ document.querySelectorAll('.js-delete-link').forEach((link) => {
     });
 });
 
-            

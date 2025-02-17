@@ -1,55 +1,46 @@
-export let cart = JSON.parse(localStorage.getItem('cart'))
+export let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-if(!cart){
-  cart =[{
-    productId:"e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-    quantity: 2,
-    deliveryOptionsId: '1'
-  },{
-    productId:"15b6fc6f-327a-4ec4-896f-486349e85a3d",
-  quantity: 1,
-  deliveryOptionsId:'2'
-  }];
-  }
-
-
-function saveToStorage(){
-  localStorage.setItem('cart', JSON.stringify(cart))
+// Set default cart items if cart is empty
+if (!cart.length) {
+  cart = [
+    {
+      productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+      quantity: 2,
+      deliveryOptionsId: "1"
+    },
+    {
+      productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+      quantity: 1,
+      deliveryOptionsId: "2"
+    }
+  ];
+  saveToStorage();
 }
 
-//take products Id and find the matching product in the cart 
-export function addToCart (productId) {
-    let matchingItem;
-    
-    cart.forEach((cartItem) =>{
-       if (cartItem.productId === productId){
-         matchingItem= cartItem;
-       }
-    }) 
-    if (matchingItem) {
-      matchingItem += 1;
-    
-    } else{
-      cart.push({
-        productId: productId,
-        quantity: 1,
-        deliveryOptionsId:'1'
-      })
-    }
-    saveToStorage();
+// Save cart to localStorage
+function saveToStorage() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Add product to cart
+export function addToCart(productId) {
+  let matchingItem = cart.find(cartItem => cartItem.productId === productId);
+  
+  if (matchingItem) {
+    matchingItem.quantity += 1; // ✅ Fix: Correctly increment quantity
+  } else {
+    cart.push({
+      productId: productId,
+      quantity: 1,
+      deliveryOptionsId: "1"
+    });
   }
+  
+  saveToStorage();
+}
 
-  export function removeFromCart(productId){
-   const newCart =[]
-
-   cart.forEach((cartItem) => {
-   if (cartItem.productId !== productId ){
-    newCart.push(cartItem)
-   }
-    })
-cart = newCart
-
-saveToStorage();
-  }
-
- 
+// Remove product from cart
+export function removeFromCart(productId) {
+  cart = cart.filter(cartItem => cartItem.productId !== productId);
+  saveToStorage();
+}
