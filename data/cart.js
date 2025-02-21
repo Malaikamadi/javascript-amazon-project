@@ -1,10 +1,12 @@
 export let cart;
-loadFromStorage();
-// Set default cart items if cart is empty
 
-export function loadFromStorage (){
-   cart = JSON.parse(localStorage.getItem('cart')) 
-  if (!cart.length) {
+loadFromStorage();
+
+// Load cart from localStorage
+export function loadFromStorage() {
+  cart = JSON.parse(localStorage.getItem('cart')) || []; // ✅ Default to an empty array
+
+  if (cart.length === 0) { // ✅ Ensure it's an array before checking length
     cart = [
       {
         productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -19,9 +21,7 @@ export function loadFromStorage (){
     ];
     saveToStorage();
   }
-  
 }
-
 
 // Save cart to localStorage
 function saveToStorage() {
@@ -33,7 +33,7 @@ export function addToCart(productId) {
   let matchingItem = cart.find(cartItem => cartItem.productId === productId);
   
   if (matchingItem) {
-    matchingItem.quantity += 1; // ✅ Fix: Correctly increment quantity
+    matchingItem.quantity += 1;
   } else {
     cart.push({
       productId: productId,
