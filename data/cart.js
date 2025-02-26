@@ -50,3 +50,18 @@ export function removeFromCart(productId) {
   cart = cart.filter(cartItem => cartItem.productId !== productId);
   saveToStorage();
 }
+
+
+export function loadCart(fun){
+  const xhr = new XMLHttpRequest()
+
+  xhr.addEventListener('load', () => {
+ 
+fun()  
+})
+console.log('load products')
+  xhr.open('GET', 'https://supersimplebackend.dev/cart')
+  xhr.send()
+
+} //loading the cart from the back end
+
